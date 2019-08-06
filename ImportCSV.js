@@ -3,12 +3,14 @@
     Import using fs
 */
 
+const Component = require('./Component.js')
+
 console.log("This is Import CSV function");
 var fs = require('fs');
 var CSV_name = [];
 
-import_CSV() 
-{
+
+function import_CSV() {
     try {
         var all_data = fs.readFileSync(CSV_name, 'utf8');
 
@@ -20,7 +22,7 @@ import_CSV()
 
 
 //This function will return the header of the dataset
-get_headers()
+function get_headers()
 {
     let data = import_CSV();
     let header = data.split('\n')[0];
@@ -28,24 +30,18 @@ get_headers()
 }
 
 
-CSV_name = "data.csv";
+CSV_name = "./Test_Data/test_data_small.csv";
 let header = get_headers();
+var data = import_CSV();
+let res = data.split('\n');
 
+for (i in res) 
+{
+    console.log("Row", i ,"in dataset is: " , res[i]);
+    let element = res[i];
+    let indv = element.split(',');
+    console.log(indv);
+    console.log(" ");
+}
 
-// console.log(data);
-// let res = data.split('\n');
-
-// for (i in res) 
-// {
-//     console.log("Row", i ,"in dataset is: " , res[i]);
-//     let element = res[i];
-//     let indv = element.split(',');
-//     console.log(indv);
-//     console.log(" ");
-// }
-
-
-// var table = new AdjList(9);
-// var vertices = header;
-
-// table.addEdge
+let c = new Component();

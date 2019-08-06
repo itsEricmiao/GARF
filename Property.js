@@ -3,8 +3,6 @@
     name: string
     value: double
 */
-
-
 class Property 
 {
     constructor() 
@@ -36,27 +34,19 @@ class Property
         return this.value;
     }
 
-    printProperty()
+    getProperty()
     {
-        console.log( "Property name:"+ this.name + " value = " + this.value);
+        return ( "Property name:"+ this.name + " value = " + this.value); 
     }
 
     quickSetting(name_, value_)
     {
         this.setName(name_);
         this.setValue(value_);
-
-
     }
 
 }
 
+module.exports = Property;
 
-for(let i = 0; i < 5; i++)
-{
-    var name = "F"+i;
-    var value = Math.random();
-    let p = new Property();
-    p.quickSetting(name, value);
-    p.printProperty();
-}
+
