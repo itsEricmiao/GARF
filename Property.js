@@ -1,9 +1,15 @@
-console.log("This is the Property class");
+/*
+    Property class:
+    name: string
+    value: double
+*/
+
+
 class Property 
 {
     constructor() 
     {
-        this.name = [];
+        this.name = "";
         this.value = 0.0;
     }
 
@@ -32,14 +38,25 @@ class Property
 
     printProperty()
     {
-        console.log( "Property name:"+ this.name + " value:" + this.value);
+        console.log( "Property name:"+ this.name + " value = " + this.value);
+    }
+
+    quickSetting(name_, value_)
+    {
+        this.setName(name_);
+        this.setValue(value_);
+
 
     }
 
 }
 
 
-let x = new Property();
-x.setName("Feature 1");
-x.setValue(0.11343134);
-x.printProperty();
+for(let i = 0; i < 5; i++)
+{
+    var name = "F"+i;
+    var value = Math.random();
+    let p = new Property();
+    p.quickSetting(name, value);
+    p.printProperty();
+}
