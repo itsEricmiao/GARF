@@ -1,6 +1,6 @@
 // This is the data structure class 
 
-class AdjList
+class Graph
 {
     constructor(noOfVertices)
     {
@@ -17,7 +17,6 @@ class AdjList
     {
         this.AdjList.get(v).push(w);
         this.AdjList.get(w).push(v);
-
     }
 
     printGraph()
@@ -27,20 +26,18 @@ class AdjList
         {
             var get_values = this.AdjList.get(i);
             var conc = "";
-
             for (var j of get_values)
             {
                 conc += j+ " ";
             }
-
             console.log(i + " -> " + conc);
         }
     }
 }
 
-var g = new AdjList(6);
+var g = new Graph(6);
 var vertices = ['A', 'B', 'C', 'D', 'E', 'F'];
-for(var i = 0; i < vertices.lenggith; i++)
+for(var i = 0; i < vertices.length; i++)
 {
     g.addVertex(vertices[i]);
 }
