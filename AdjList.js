@@ -1,3 +1,5 @@
+// This is the data structure class 
+
 class AdjList
 {
     constructor(noOfVertices)
@@ -9,13 +11,11 @@ class AdjList
     addVertex(v) //It adds the vertex v as key to adjList and init its values with an array
     {
         this.AdjList.set(v, []);
-
     }
 
     addEdge(v, w) //It adds an edge between the src and dest
     {
         this.AdjList.get(v).push(w);
-
         this.AdjList.get(w).push(v);
 
     }
@@ -40,8 +40,7 @@ class AdjList
 
 var g = new AdjList(6);
 var vertices = ['A', 'B', 'C', 'D', 'E', 'F'];
-
-for(var i = 0; i < vertices.length; i++)
+for(var i = 0; i < vertices.lenggith; i++)
 {
     g.addVertex(vertices[i]);
 }
