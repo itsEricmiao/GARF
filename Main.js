@@ -13,25 +13,35 @@ var data = parser.get_data();
 var headers = parser.get_headers();
 var single_header = headers.split(',');
 let rows = data.split('\n');
-console.log(rows);
-let arr = [];
-for (i in rows) 
+// console.log(rows);
+
+let all_c = [];
+for (let i = 0; i < 10; i++) 
 {
-    //console.log("Row", i, "in dataset is: ", rows[i]);
     let each_row = rows[i];
     let individual_feature_num = each_row.split(',');
     let compound_name = individual_feature_num[0];
-    //console.log(individual_feature_num);
-    for (let j = 1; j < 8; j++) 
+    let c = new Component(); 
+    c.setName(compound_name);
+    let arr = [];
+    for (let j = 1; j < 9; j++) 
     {
-        let value = individual_feature_num[j+1];
+        let value = individual_feature_num[j];
         let p = new Property();
         p.quickSetting(single_header[j], value);
         arr.push(p);
     }
-    // console.log(" ");
+    c.setProperties(arr);
+    c.setClassification(1);
+    all_c.push(c);
 }
 
+
+for(i in all_c)
+{
+    all_c[i].printComponent();
+    console.log("");
+}
 
 // let arr = [];
 // for (let i = 0; i < 10; i++) {
@@ -42,8 +52,7 @@ for (i in rows)
 //     arr.push(p);
 // }
 
-let c = new Component();
-c.setName("SMU_001");
-c.setClassification(1);
-c.setProperties(arr);
-c.printComponent();
+
+
+
+
