@@ -4,44 +4,61 @@
 */
 
 const Component = require('./Component.js')
+var fs = require('fs'); 
 
-console.log("This is Import CSV function");
-var fs = require('fs');
-var CSV_name = [];
-
-
-function import_CSV() {
-    try {
-        var all_data = fs.readFileSync(CSV_name, 'utf8');
-
-    } catch (e) {
-        console.log('ERROR in ImportCSV Module: Cannot find File', e.stack);
+class ImportCSV 
+{
+    constructor() 
+    {
+        this.CSV_name = [];
+        this.data = [];
     }
-    return all_data;
+
+
+    read_data_from_CSV()
+    {
+        try 
+        {
+            var all_data = fs.readFileSync(this.CSV_name, 'utf8');
+
+        } catch (e) 
+        {
+            console.log('ERROR in ImportCSV Module: Cannot find File', e.stack);
+        }
+        this.data = all_data
+    }
+
+    get_data() 
+    {
+        return this.data;
+    }
+
+    //This function will return the header of the dataset
+    get_headers() 
+    {
+        //ImportCSV();
+        let header = this.data.split('\n')[0];
+        return header;
+    }
+
+    set_data_file_path(file_path) 
+    {
+        this.CSV_name = file_path;
+    }
+
+
+
+    // let header = get_headers();
+    // var data = import_CSV();
+    // let res = data.split('\n');
+
+    // for (i in res) 
+    // {
+    //     console.log("Row", i ,"in dataset is: " , res[i]);
+    //     let element = res[i];
+    //     let indv = element.split(',');
+    //     console.log(indv);
+    //     console.log(" ");
+    // }
 }
-
-
-//This function will return the header of the dataset
-function get_headers()
-{
-    let data = import_CSV();
-    let header = data.split('\n')[0];
-    return header;
-}
-
-
-CSV_name = "./Test_Data/test_data_small.csv";
-let header = get_headers();
-var data = import_CSV();
-let res = data.split('\n');
-
-for (i in res) 
-{
-    console.log("Row", i ,"in dataset is: " , res[i]);
-    let element = res[i];
-    let indv = element.split(',');
-    console.log(indv);
-    console.log(" ");
-}
-
-let c = new Component();
+module.exports = ImportCSV;
