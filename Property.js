@@ -36,7 +36,7 @@ class Property
 
     getProperty()
     {
-        return ( "Property name:"+ this.name + " value = " + this.value); 
+        return ( "Feature: "+ this.name + " value = " + this.value); 
     }
 
     quickSetting(name_, value_)

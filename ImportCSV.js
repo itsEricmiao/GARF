@@ -1,6 +1,9 @@
 /*
     Import CSV files and convert to AdjList data structure
-    Import using fs
+    Import using fs (Node.js File System Module)...
+    
+    - Come back for fs later???
+    - Need to fix col and row later
 */
 
 const Component = require('./Component.js')
@@ -33,10 +36,9 @@ class ImportCSV
         return this.data;
     }
 
-    //This function will return the header of the dataset
+    //This function will return the headers of the dataset
     get_headers() 
     {
-        //ImportCSV();
         let header = this.data.split('\n')[0];
         return header;
     }
