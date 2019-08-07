@@ -1,43 +1,6 @@
-//Main.js
-//Testing purpose for now
-
 const Property = require('./Property.js')
 const Component = require('./Component.js')
 const CSV_parser = require('./ImportCSV.js')
-const Graph = require('./AdjList.js')
-
-
-function TEST_COMPONENT_PROPERTY() {
-    let arr = [];
-    for (let i = 0; i < 10; i++) {
-        let name = "F" + i;
-        let value = Math.random();
-        let p = new Property();
-        p.quickSetting(name, value);
-        arr.push(p);
-    }
-}
-
-
-function TEST_ADJLIST() {
-    //Test case 1: Untemplated
-    var g = new Graph(6);
-    var vertices = ['A', 'B', 'C', 'D', 'E', 'F'];
-    for (var i = 0; i < vertices.length; i++) {
-        g.addVertex(vertices[i]);
-    }
-    g.addEdge('A', 'B');
-    g.addEdge('A', 'D');
-    g.addEdge('A', 'E');
-    g.addEdge('B', 'C');
-    g.addEdge('D', 'E');
-    g.addEdge('E', 'F');
-    g.addEdge('E', 'C');
-    g.addEdge('C', 'F');
-
-    g.printGraph();
-
-}
 
 function TEST_IMPORTCSV() {
     let parser = new CSV_parser();
@@ -73,5 +36,3 @@ function TEST_IMPORTCSV() {
         console.log("");
     }
 }
-
-
