@@ -1,9 +1,7 @@
 // This is the data structure class 
 
-class Graph
-{
-    constructor(noOfVertices)
-    {
+class Graph {
+    constructor(noOfVertices) {
         this.noOfVertices = noOfVertices;
         this.AdjList = new Map();
     }
@@ -16,22 +14,41 @@ class Graph
     addEdge(v, w) //It adds an edge between the src and dest
     {
         this.AdjList.get(v).push(w);
-        this.AdjList.get(w).push(v);
+        //this.AdjList.get(w).push(v);
     }
 
-    printGraph()
-    {
+    printGraph() {
         var get_keys = this.AdjList.keys();
-        for (var i of get_keys)
-        {
+        for (var i of get_keys) {
             var get_values = this.AdjList.get(i);
             var conc = "";
-            for (var j of get_values)
-            {
-                conc += j+ " ";
+            for (var j of get_values) {
+                conc += j + " ";
             }
             console.log(i + " -> " + conc);
         }
+    }
+
+    createSampleData() 
+    {
+        const Property = require('./Property.js')
+        const Component = require('./Component.js')
+        const CSV_parser = require('./ImportCSV.js')
+        var g = new Graph(6);
+        var vertices = ['feature_A', 'feature_B', 'feature_C', 'feature_D', 'feature_E', 'feature_F'];
+        for (var i = 0; i < vertices.length; i++) 
+        {
+            g.addVertex(vertices[i]);
+        }
+        g.addEdge('feature_A', 0.43534534);
+        g.addEdge('feature_B', 0.324);
+        g.addEdge('feature_C', 0.23432);
+        g.addEdge('feature_D', 0.256532);
+        g.addEdge('feature_E', 0.7653);
+        g.addEdge('feature_F', 0.64236);
+
+        return g;
+
     }
 }
 

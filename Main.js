@@ -30,14 +30,15 @@ function TEST_ADJLIST()
     {
         g.addVertex(vertices[i]);
     }
-    g.addEdge('A', 'B');
-    g.addEdge('A', 'D');
-    g.addEdge('A', 'E');
-    g.addEdge('B', 'C');
-    g.addEdge('D', 'E');
-    g.addEdge('E', 'F');
-    g.addEdge('E', 'C');
-    g.addEdge('C', 'F');
+    g.addEdge('A', 'data_1');
+    g.addEdge('A', 'data_2');
+    g.addEdge('A', 'data_3');
+    g.addEdge('B', 'data_4');
+    g.addEdge('D', 'data_5');
+    g.addEdge('E', 'data_6');
+    g.addEdge('E', 'data_7');
+    g.addEdge('C', 'data_8');
+    g.addEdge('F', 'data_9');
 
     g.printGraph();
 
@@ -165,4 +166,5 @@ describe('ID3 Decision Tree', function() {
 }
 
 //TEST_IMPORTCSV_SMALL_DATA();
-TEST_TREE();
+// TEST_TREE();
+TEST_ADJLIST();
