@@ -3,7 +3,7 @@ const Stack = require("./AdjList");
 var data = new Stack();
 data = data.createSampleData();
 
-function Init()
+function Init(value)
 {
     console.log("GA: Calling the Init command")
 }
@@ -13,6 +13,7 @@ function Generate()
 {
     console.log("GA: Calling the Init command")
 }
+
 
 function Fitness()
 {
@@ -30,6 +31,7 @@ function Mating()
 {
     console.log("GA: Calling the Mating command")
 }
+
 
 function Mutate()
 {
