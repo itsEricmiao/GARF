@@ -93,6 +93,7 @@ function TEST_IMPORTCSV_SMALL_DATA()
     var single_header = headers.split(',');
     let rows = data.split('\n');
 
+
     let all_c = [];
     for (let i = 0; i < 10; i++) 
     {
@@ -136,6 +137,8 @@ describe('ID3 Decision Tree', function() {
     dt = new ID3(SAMPLE_DATASET.data, SAMPLE_DATASET_CLASS_NAME, SAMPLE_DATASET.features);
   });
 
+  dt = new ID3(SAMPLE_DATASET.data)
+
   it('should initialize', function() {
     assert.ok(dt);
   });
@@ -156,6 +159,13 @@ describe('ID3 Decision Tree', function() {
     assert.equal(accuracy, 1);
   });
 
+  // it('should evaluate perfectly on training dataset', function())
+  // {
+  //   var accuracy = dt.evaluate(SAMPLE_DATASET.data);
+  //   assert.equal(accuracy,1);
+  // }
+
+
   it('should provide access to the underlying model as JSON', function() {
     var treeModel = dt.toJSON();
     assert.equal(treeModel.constructor, Object);
@@ -167,4 +177,6 @@ describe('ID3 Decision Tree', function() {
 
 //TEST_IMPORTCSV_SMALL_DATA();
 // TEST_TREE();
-TEST_ADJLIST();
+var g = new Graph();
+var wrapper = function(){g.TESTING()};
+wrapper();

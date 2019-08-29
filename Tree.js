@@ -2,36 +2,17 @@
 //Using Lodash: Lodash makes JavaScript easier by taking the hassle out of working with arrays, numbers, objects, strings
 var _ = require('lodash');
 
-/*
- * ID3 Decision Tree Algorithm
- * @module DecisionTreeID3
- */
-
 module.exports = (
     function() 
     {
-
-  /**
-   * Map of valid tree node types
-   * @constant
-   * @static
-   */
-  const NODE_TYPES = DecisionTreeID3.NODE_TYPES = {
+    const NODE_TYPES = DecisionTreeID3.NODE_TYPES = {
     RESULT: 'result',
     FEATURE: 'feature',
     FEATURE_VALUE: 'feature_value'
   };
 
-  /**
-   * Underlying model
-   * @private
-   */
-  var model;
 
-  /**
-   * @constructor
-   * @return {DecisionTreeID3}
-   */
+  var model;
   function DecisionTreeID3(data, target, features) {
     this.data = data;
     this.target = target;
@@ -39,9 +20,7 @@ module.exports = (
     model = createTree(data, target, features);
   }
 
-  /**
-   * @public API
-   */
+
   DecisionTreeID3.prototype = {
 
     // Predicts class for sample
@@ -100,10 +79,6 @@ module.exports = (
   };
 
 
-  /**
-   * Creates a new tree
-   * @private
-   */
   function createTree(data, target, features) {
     var targets = _.unique(_.pluck(data, target));
     if (targets.length == 1) {
@@ -156,10 +131,7 @@ module.exports = (
     return node;
   }
 
-  /**
-   * Computes entropy of a list
-   * @private
-   */
+
   function entropy(vals) {
     var uniqueVals = _.unique(vals);
     var probs = uniqueVals.map(function(x) {
@@ -175,10 +147,7 @@ module.exports = (
     }, 0);
   }
 
-  /**
-   * Computes gain
-   * @private
-   */
+
   function gain(data, target, feature) {
     var attrVals = _.unique(_.pluck(data, feature));
     var setEntropy = entropy(_.pluck(data, target));
@@ -199,20 +168,14 @@ module.exports = (
     return setEntropy - sumOfEntropies;
   }
 
-  /**
-   * Computes Max gain across features to determine best split
-   * @private
-   */
+
   function maxGain(data, target, features) {
     return _.max(features, function(element) {
       return gain(data, target, element)
     });
   }
 
-  /**
-   * Computes probability of of a given value existing in a given list
-   * @private
-   */
+
   function prob(value, list) {
     var occurrences = _.filter(list, function(element) {
       return element === value
@@ -223,18 +186,12 @@ module.exports = (
     return numOccurrences / numElements;
   }
 
-  /**
-   * Computes Log with base-2
-   * @private
-   */
+
   function log2(n) {
     return Math.log(n) / Math.log(2);
   }
 
-  /**
-   * Finds element with highest occurrence in a list
-   * @private
-   */
+
   function mostCommon(list) {
     var elementFrequencyMap = {};
     var largestFrequency = -1;
@@ -253,16 +210,10 @@ module.exports = (
     return mostCommonElement;
   }
 
-  /**
-   * Generates random UUID
-   * @private
-   */
-  function randomUUID() {
-    return "_r" + Math.random().toString(32).slice(2);
-  }
 
-  /**
-   * @class DecisionTreeID3
-   */
+  // function randomUUID() {
+  //   return "_r" + Math.random().toString(32).slice(2);
+  // }
+
   return DecisionTreeID3;
 })();

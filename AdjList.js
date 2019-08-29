@@ -28,6 +28,7 @@ class Graph {
             console.log(i + " -> " + conc);
         }
     }
+    
 
     createSampleData() 
     {
@@ -48,7 +49,28 @@ class Graph {
         g.addEdge('feature_F', 0.64236);
 
         return g;
+    }
 
+    TESTING() 
+    {
+        //Test case 1: Untemplated
+        var g = new Graph(6);
+        var vertices = ['A', 'B', 'C', 'D', 'E', 'F'];
+        for (var i = 0; i < vertices.length; i++) 
+        {
+            g.addVertex(vertices[i]);
+        }
+        g.addEdge('A', 'data_1');
+        g.addEdge('A', 'data_2');
+        g.addEdge('A', 'data_3');
+        g.addEdge('B', 'data_4');
+        g.addEdge('D', 'data_5');
+        g.addEdge('E', 'data_6');
+        g.addEdge('E', 'data_7');
+        g.addEdge('C', 'data_8');
+        g.addEdge('F', 'data_9');
+
+        g.printGraph();
     }
 }
 
