@@ -1,67 +1,30 @@
-function GARF() {
+function ConfigGA() {
     this.genIndv = function() {};
     this.getFitness = function() {};
     this.mutate = function() {};
-    this.goalFitness = GARF.fitnessMax;
 };
 
-GARF.fitnessMax = 1;
-GARF.fitnessMin = -1;
-
-function GeneticAlgorithm(GARF, popSize, mutProb, breedFunction, verbose = false) 
+function GARF(GA, populationSize, mutateProbability, breedingFunction) 
 {
-
-    checkConstructorVars(GARF, popSize, mutProb, breedFunction);
-
-    // Make sure all attributes are valid
-    function checkConstructorVars(GARF, popSize, mutProb, breedFunction) {
-        if(GARF === undefined) {
-            throw 'GARF must be defined';
-        }
-
-        if(popSize === undefined) {
-            throw 'Population size must be defined';
-        }
-
-        if (popSize <= 2) {
-            throw 'Population size must be greater than 2. Current size: ' + popSize;
-        }
-
-        if(mutProb === undefined) {
-            throw 'Mutability probability must be defined';
-        }
-
-        if(breedFunction === undefined) {
-            throw 'Breed function must be defined';
-        }
-    };
-
-    
-
     this.evolve = function(generations) {
-        let population = this.generatePopulation(GARF.genIndv, popSize);
-
+        let population = this.generatePopulation(GA.genIndv, populationSize);
         for (var i = 0; i < generations; i++) {
-            population = this.getFitness(population, GARF.getFitness);
-            population = this.sortByFitness(population, GARF.getFitness, GARF.goalFitness);
-
-            //if (verbose) printUpdate(population, i);
-            population = breed(population, GARF.mutate, mutProb, breedFunction);
+            population = this.getFitness(population, GA.getFitness);
+            population = this.sortByFitness(population, GA.getFitness, GA.goalFitness);
+            printUpdate(population, i);
+            population = breed(population, GA.mutate, mutateProbability, breedingFunction);
         }
-        population = this.getFitness(population, GARF.getFitness);
-        population = this.sortByFitness(population, GARF.getFitness, GARF.goalFitness);
-        // if (verbose) printUpdate(population, generations);
-        let results = getResults(population, GARF.getFitness, generations);
+        population = this.getFitness(population, GA.getFitness);
+        population = this.sortByFitness(population, GA.getFitness, GA.goalFitness);
+        printUpdate(population, generations);
+        let results = getResults(population, GA.getFitness, generations);
         return results;
     };
 
 
-
-    // Generate a population with the given individual
-    // Generation strategy and population size
-    this.generatePopulation = function(genIndv, popSize) {
+    this.generatePopulation = function(genIndv, populationSize) {
         let pop = [];
-        for (var i = 0; i < popSize; i++) {
+        for (var i = 0; i < populationSize; i++) {
             let indv = { individual: genIndv() }
             pop.push(indv);
         }
@@ -86,7 +49,7 @@ function GeneticAlgorithm(GARF, popSize, mutProb, breedFunction, verbose = false
     };
 
     // breed population and apply mutation if probability met
-    function breed(population, mutate, mutProb, breedFunction) {
+    function breed(population, mutate, mutateProbability, breedingFunction) {
 
         // Select best individuals and remove bottom half of population
         let breeders = Math.round(population.length / 2);
@@ -105,10 +68,10 @@ function GeneticAlgorithm(GARF, popSize, mutProb, breedFunction, verbose = false
             let parentB = population[parentBIndex].individual;
 
             // Create newborn
-            let newborn = breedFunction(parentA, parentB);
+            let newborn = breedingFunction(parentA, parentB);
 
             // Mutate newborn
-            if (Math.random() <= mutProb) {
+            if (Math.random() <= mutateProbability) {
                 newborn = mutate(newborn);
             }
             newPopulation.push({ individual: newborn });
@@ -141,7 +104,7 @@ function GeneticAlgorithm(GARF, popSize, mutProb, breedFunction, verbose = false
 
 function Algorithms() {};
 
-Algorithms.crossBreed = function(parentA, parentB) {
+Algorithms.singleCrossOver = function(parentA, parentB) {
     // Select cutOff point and create newborn
     let cutOff = Math.floor(Math.random() * parentA.length);
     let newborn = parentA.slice(0, cutOff + 1);
@@ -154,51 +117,48 @@ Algorithms.crossBreed = function(parentA, parentB) {
 }
 
 
-
-
 /* 
-    User define how to create an individual
-    User define how to measure the fittness of an individual
-    User define how to mutate an individual
+    Simple Unit Test using Array[ ] 
+    User defines how to create an individual
+    User defines how to measure the fittness of an individual
+    User defines how to mutate an individual
 */
-
 function generateIndividual() {
 	let array = [];
-	for(var i = 0; i < 10; i++){
+	for(var i = 0; i < 20; i++){ //manually set the number of elements in the array
         x = Math.round(Math.random());
 		array.push(x);
 	}
 	return array;
 };
 
-function getFitness(indv) {
+function getFitness(individual) {
 	let fitness = 0;
-	for(var i = 0; i < indv.length; i++) {
-		fitness += indv[i] == 1 ? 1 : 0;
+	for(var i = 0; i < individual.length; i++) {
+		fitness += individual[i] == 1 ? 1 : 0;
 	}
 	return fitness;
 }
 
-function mutate(indv) {
-	let mutatedIndex = Math.floor(Math.random() * indv.length);
-	indv[mutatedIndex] = indv[mutatedIndex] == 1 ? 0 : 1;
-	return indv;
+function mutate(individual) {
+	let mutatedIndex = Math.floor(Math.random() * individual.length);
+	individual[mutatedIndex] = individual[mutatedIndex] == 1 ? 0 : 1;
+	return individual;
 }
 
-// Create a GARF
-var GARF = new GARF();
-GARF.genIndv = generateIndividual;
-GARF.getFitness = getFitness;
-GARF.goalFitness = GARF.fitnessMax;
-GARF.mutate = mutate;
+// Config GA
+var GA = new ConfigGA();
+GA.genIndv = generateIndividual;
+GA.getFitness = getFitness;
+GA.mutate = mutate;
 
 // Create parameters
-var popSize = 10;
-var mutProb = 0.2;
-var generations = 5;
-var breedFunction = Algorithms.crossBreed;
+var populationSize = 20;
+var mutateProbability = 0.1;
+var generations = 10;
+var crossOverFunction = Algorithms.singleCrossOver;
 
-// Create genetic algorithm and evolve individuals
-var gen = new GeneticAlgorithm(GARF, popSize, mutProb, breedFunction, true);
-console.log("Example:", '\n' , gen.evolve(generations));
-gen.getArr(generations);
+// Create genetic algorithm 
+var gen = new GARF(GA, populationSize, mutateProbability, crossOverFunction);
+var output = gen.evolve(generations); // OUTPUT IS AN OBJECT
+console.log(output);
