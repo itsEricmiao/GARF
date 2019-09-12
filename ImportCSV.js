@@ -48,19 +48,61 @@ class ImportCSV
         this.CSV_name = file_path;
     }
 
-
-
-    // let header = get_headers();
-    // var data = import_CSV();
-    // let res = data.split('\n');
-
-    // for (i in res) 
-    // {
-    //     console.log("Row", i ,"in dataset is: " , res[i]);
-    //     let element = res[i];
-    //     let indv = element.split(',');
-    //     console.log(indv);
-    //     console.log(" ");
-    // }
+   
 }
 module.exports = ImportCSV;
+
+
+
+//  let header = get_headers();
+//  var data = import_CSV();
+//  let res = data.split('\n');
+ 
+//  for (i in res) 
+//  {
+//      console.log("Row", i ,"in dataset is: " , res[i]);
+//      let element = res[i];
+//      let indv = element.split(',');
+//      console.log(indv);
+//      console.log(" ");
+//  }
+
+function TEST_IMPORTCSV_REAL_DATA() 
+{
+    let parser = new CSV_parser();
+    parser.set_data_file_path('./Test_Data/data.csv');
+    //parser.set_data_file_path('./Test_Data/test_data_small.csv');
+    parser.read_data_from_CSV();
+    var data = parser.get_data();
+    var headers = parser.get_headers();
+    var single_header = headers.split(',');
+    let rows = data.split('\n');
+
+    
+    let all_c = [];
+    for (let i = 0; i < 63; i++) 
+    {
+        let each_row = rows[i];
+        let individual_feature_num = each_row.split(',');
+        let compound_name = individual_feature_num[0];
+        let c = new Component();
+        c.setName(compound_name);
+        let arr = [];
+        for (let j = 1; j < 94; j++) 
+        {
+            let value = individual_feature_num[j];
+            let p = new Property();
+            p.quickSetting(single_header[j], value);
+            arr.push(p);
+        }
+        c.setProperties(arr);
+        c.setClassification(1);
+        all_c.push(c);
+    }
+
+    for (i in all_c) 
+    {
+        all_c[i].printComponent();
+        console.log("");
+    }
+}

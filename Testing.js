@@ -1,3 +1,115 @@
+function ConfigGA() 
+{
+    this.genIndv = function() {};
+    this.getFitness = function() {};
+    this.mutate = function() {};
+};
+
+
+function GARF(GA, populationSize, mutateProbability, breedingFunction) 
+{
+    this.evolve = function(generations) {
+        let population = this.generatePopulation(GA.genIndv, populationSize);
+        for (var i = 0; i < generations; i++) {
+            population = this.getFitness(population, GA.getFitness);
+            population = this.sortByFitness(population, GA.getFitness, GA.goalFitness);
+            printUpdate(population, i);
+            population = breed(population, GA.mutate, mutateProbability, breedingFunction);
+        }
+        population = this.getFitness(population, GA.getFitness);
+        population = this.sortByFitness(population, GA.getFitness, GA.goalFitness);
+        printUpdate(population, generations);
+        let results = getResults(population, GA.getFitness, generations);
+        return results;
+    };
+
+
+
+    this.generatePopulation = function(genIndv, populationSize) {
+        let pop = [];
+        for (var i = 0; i < populationSize; i++) {
+            let indv = { individual: genIndv() }
+            pop.push(indv);
+        }
+        return pop;
+    };
+
+    this.getFitness = function(population, getFitness) {
+        for (var i = 0; i < population.length; i++){
+            let indv = population[i];
+            indv.fitness = getFitness(indv.individual);
+            population[i] = indv;
+        }
+        return population;
+    }
+
+    // Sort the population array
+    this.sortByFitness = function(population, getFitness, goalFitness) {
+        population.sort(function(a, b) {
+            return (b.fitness - a.fitness) * goalFitness;
+        });
+        return population;
+    };
+
+    // breed population and apply mutation if probability met
+    function breed(population, mutate, mutateProbability, breedingFunction) {
+
+        // Select best individuals and remove bottom half of population
+        let breeders = Math.round(population.length / 2);
+        let newPopulation = population.slice(0, breeders);
+
+        // Select parents
+        while (newPopulation.length != population.length) {
+            let parentAIndex = Math.floor(Math.random() * breeders);
+            let parentBIndex = Math.floor(Math.random() * breeders);
+
+            while (parentAIndex == parentBIndex) {
+                parentBIndex = Math.floor(Math.random() * breeders);
+            }
+
+            let parentA = population[parentAIndex].individual;
+            let parentB = population[parentBIndex].individual;
+
+            // Create newborn
+            let newborn = breedingFunction(parentA, parentB);
+
+            // Mutate newborn
+            if (Math.random() <= mutateProbability) {
+                newborn = mutate(newborn);
+            }
+            newPopulation.push({ individual: newborn });
+        }
+        return newPopulation;
+    };
+
+    function getResults(population, getFitness, generations) {
+        let output = {
+            generations: generations,
+            population: []
+        };
+        for (var i = 0; i < population.length; i++) {
+            let indv = population[i];
+            output.population.push(indv);
+        }
+        return output;
+    };
+
+    function printUpdate(population, generation) {
+        let fittestScore = population[0].fitness;
+        let sum = 0;
+        for (var i = 0; i < population.length; i++) {
+            sum += population[i].fitness;
+        }
+        let average = sum / population.length;
+        console.log("Generation:", generation, "Fittest:", fittestScore, "Average:", average);
+    };
+};
+
+
+
+//RF Start here: ------------------------------------------------------------------------------------------------------------------------
+
+
 var dt = (function () {
           
     /*
@@ -362,6 +474,20 @@ var dt = (function () {
 
 
 
+function Algorithms() {};
+
+Algorithms.singleCrossOver = function(parentA, parentB) {
+    // // Select cutOff point and create newborn
+    // let cutOff = Math.floor(Math.random() * parentA.length);
+    // let newborn = parentA.slice(0, cutOff + 1);
+    // let parentBChrom = parentB.slice(cutOff + 1, parentB.length);
+
+    // for (var i = 0; i < parentBChrom.length; i++) {
+    //     newborn.push(parentBChrom[i]);
+    // }
+    // return newborn;
+}
+
 // Training set
 var data = 
  [{compound: 'SMU_001', feature_1: 10, feature_2: 200, feature_3: 45, result: 'Postive'},
@@ -384,43 +510,67 @@ var config = {
  ignoredAttributes: ['compound']
 };
 
-// Building Decision Tree
-var decisionTree1 = new dt.DecisionTree(config);
+function generateIndividual() {
+    let arr = [];
+    for (var i = 0; i < 5; i++)
+    {
+        var decisionTree = new dt.DecisionTree(config)
+        var numberOfTrees = 5;
+        var randomForest = new dt.RandomForest(config, numberOfTrees);
+        arr.push(decisionTree)
+    }
+	return arr;
+};
 
-// Building Random Forest and config everything
-var numberOfTrees = 3;
-var randomForest = new dt.RandomForest(config, numberOfTrees);
 
-// Testing Decision Tree and Random Forest
-var testing_1 = {compound: 'SMU_011', feature_1: 13, feature_2: 266, feature_3: 45};
-var testing_2 = {compound: 'SMU_012', feature_1: 50, feature_2: 800, feature_3: 8};
-var testing_3 = {compound: 'SMU_013', feature_1: 12, feature_2: 244, feature_3: 54}
+function getFitness(individual) {
+	let fitness = 0;
+	for(var i = 0; i < individual.length; i++) {
+		fitness += individual[i] == 1 ? 1 : 0;
+	}
+	return fitness;
+}
 
-// Prediction for Testing_1
-var decisionTreePrediction_1A = decisionTree1.predict(testing_1);
-// var decisionTreePrediction_1B = decisionTree2.predict(testing_1);
-var randomForestPrediction_1 = randomForest.predict(testing_1);
 
-// Prediction for Testing_2
-var decisionTreePrediction_2A = decisionTree1.predict(testing_2);
-// var decisionTreePrediction_2B = decisionTree2.predict(testing_2);
-var randomForestPrediction_2 = randomForest.predict(testing_2);
+function mutate(individual) {
+	let mutatedIndex = Math.floor(Math.random() * individual.length);
+	individual[mutatedIndex] = individual[mutatedIndex] == 1 ? 0 : 1;
+	return individual;
+}
 
-// Prediction for Testing_3
-var decisionTreePrediction_3A = decisionTree1.predict(testing_3);
-// var decisionTreePrediction_3B = decisionTree2.predict(testing_3);
-var randomForestPrediction_3 = randomForest.predict(testing_3);
+// Config GA
+var GA = new ConfigGA();
+GA.genIndv = generateIndividual;
+GA.getFitness = getFitness;
+GA.mutate = mutate;
 
-console.log("{compound: 'Testing_1', feature_1: 33, feature_2: 155, feature_3: 241}");
-console.log("Decision Tree 1 prediction: " + decisionTreePrediction_1A)
-console.log(randomForestPrediction_1)
-console.log();
+// Create parameters
+var populationSize = 10;
+var mutateProbability = 0.1;
+var generations = 10;
+var crossOverFunction = Algorithms.singleCrossOver;
 
-console.log("{compound: 'Testing_2', feature_1: 188, feature_2: 789, feature_3: 122}");
-console.log("Decision Tree 1 prediction: " + decisionTreePrediction_2A)
-console.log(randomForestPrediction_2)
-console.log();
 
-console.log("{compound: 'Testing_3', feature_1: 12, feature_2: 124, feature_3: 435}");
-console.log("Decision Tree 1 prediction: " + decisionTreePrediction_3A)
-console.log(randomForestPrediction_3)
+    var output = generateIndividual();
+    for(var i = 0; i < output.length; i++)
+    {
+        //x = JSON.stringify(output[i])
+        // x = output[i]
+        // y = JSON.stringify(x)
+        // console.log ()
+        // console.log ()
+        // console.log (x)
+        // console.log (y)
+        x = JSON.stringify(output[i])
+        console.log(JSON.parse(x))
+    }
+   
+    
+    
+
+
+// Create genetic algorithm 
+// var gen = new GARF(GA, populationSize, mutateProbability, crossOverFunction);
+// var output = gen.evolve(generations); // OUTPUT IS AN OBJECT
+// x = JSON.stringify(output)
+// console.log(x); 

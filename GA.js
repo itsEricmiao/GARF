@@ -1,8 +1,10 @@
-function ConfigGA() {
+function ConfigGA() 
+{
     this.genIndv = function() {};
     this.getFitness = function() {};
     this.mutate = function() {};
 };
+
 
 function GARF(GA, populationSize, mutateProbability, breedingFunction) 
 {
@@ -20,6 +22,7 @@ function GARF(GA, populationSize, mutateProbability, breedingFunction)
         let results = getResults(population, GA.getFitness, generations);
         return results;
     };
+
 
 
     this.generatePopulation = function(genIndv, populationSize) {
@@ -117,6 +120,23 @@ Algorithms.singleCrossOver = function(parentA, parentB) {
 }
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /* 
     Simple Unit Test using Array[ ] 
     User defines how to create an individual
@@ -125,12 +145,15 @@ Algorithms.singleCrossOver = function(parentA, parentB) {
 */
 function generateIndividual() {
 	let array = [];
-	for(var i = 0; i < 20; i++){ //manually set the number of elements in the array
+    for(var i = 0; i < 20; i++)
+    {   
+        //manually set the number of elements in the array
         x = Math.round(Math.random());
 		array.push(x);
 	}
 	return array;
 };
+
 
 function getFitness(individual) {
 	let fitness = 0;
@@ -139,6 +162,7 @@ function getFitness(individual) {
 	}
 	return fitness;
 }
+
 
 function mutate(individual) {
 	let mutatedIndex = Math.floor(Math.random() * individual.length);
@@ -161,4 +185,7 @@ var crossOverFunction = Algorithms.singleCrossOver;
 // Create genetic algorithm 
 var gen = new GARF(GA, populationSize, mutateProbability, crossOverFunction);
 var output = gen.evolve(generations); // OUTPUT IS AN OBJECT
-console.log(output);
+x = JSON.stringify(output)
+console.log(x); 
+
+
