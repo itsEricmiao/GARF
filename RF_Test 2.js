@@ -21,10 +21,10 @@ function shuffle(data) {
 }
 
 var newData = shuffle(all_data)
-var training = newData.slice(0, 50)
-var testing = newData.slice(101, 120)
+var training = newData.slice(0, 100)
+var testing = newData.slice(101, 130)
 var forest = new RF.RandomForest(training, target_name, features, {
-  numTrees: 25,	              // how many trees should we use (results are averaged together)
+  numTrees: 50,	              // how many trees should we use (results are averaged together)
   percentData: .9,			      // what percentage of training data should each tree see (bootstrapping) - For larger datasets I find .15 works well
   percentFeatures: 0.1	      // what percentage of features should each tree see (feature bagging) - For larger datasets I find .7 works well
 

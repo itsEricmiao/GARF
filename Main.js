@@ -18,7 +18,7 @@ export async function main(config) {
 
 (async()=>{
     let output = await main(configFile)
-    console.log(output.score)
+    console.log(output.prevTrees)
 })();
 
 

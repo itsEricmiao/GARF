@@ -6,12 +6,13 @@ function Command(configFile) {
     var newData         = shuffle(data.all_data)
     this.config         = configFile
     this.model          = null;
-    this.training_set   = newData.slice(0, 50);
-    this.testing_set    = newData.slice(115, 129);
+    this.training_set   = newData.slice(0, 100);
+    this.testing_set    = newData.slice(111, 130);
     this.target         = data.target
     this.features       = data.all_features
+    this.oldScore       = configFile.oldScore
     this.cur_bestTree   = [];
-    this.score          = 0;
+    this.newScore       = 0;
 }
 
 
@@ -28,7 +29,7 @@ Command.prototype = {
     _init: function () {
         var randomForest = new RF.RandomForest(this.training_set, this.target, this.features, {
             numTrees: 100,	                    // how many trees should we use (results are averaged together)
-            percentData: 0.9,			        // what percentage of training data should each tree see (bootstrapping) - For larger datasets I find .15 works well
+            percentData: .9,			        // what percentage of training data should each tree see (bootstrapping) - For larger datasets I find .15 works well
             percentFeatures: 0.1,	            // what percentage of features should each tree see (feature bagging) - For larger datasets I find .7 works well
             //No new trees
         });
@@ -38,9 +39,9 @@ Command.prototype = {
 
     _generate: function () {
         var rf = new RF.RandomForest(this.training_set, this.target, this.features, {
-            numTrees: 25,	                    // how many trees should we use (results are averaged together)
-            percentData: 1,			        // what percentage of training data should each tree see (bootstrapping) - For larger datasets I find .15 works well
-            percentFeatures: 0.1,	            // what percentage of features should each tree see (feature bagging) - For larger datasets I find .7 works well
+            numTrees: 80,	                    // how many trees should we use (results are averaged together)
+            percentData: .8,			        // what percentage of training data should each tree see (bootstrapping) - For larger datasets I find .15 works well
+            percentFeatures: 0.2,	            // what percentage of features should each tree see (feature bagging) - For larger datasets I find .7 works well
             bestTrees: this._readTrees()
         });
         this.model = rf
@@ -49,6 +50,7 @@ Command.prototype = {
 
     _train: function () {
         this.newScore = this.model.train(this.testing_set).accuracy
+        // console.log("Accuracy of current generation", this.newScore)
     },
 
 
@@ -80,8 +82,8 @@ Command.prototype = {
 
     _output: function(){
         var output = {
-            type: "smu-clustering",
-            score: this.newScore,
+            oldScore: this.oldScore*100,
+            newScore: this.newScore*100,
             prevTrees: this.cur_bestTree,
             commands: []
         }

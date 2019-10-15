@@ -3,7 +3,7 @@ export { RandomForest, DecisionTree }
 
 function RandomForest(input, target, features, options) {
 
-    this.numTrees = options.numTrees || 80;
+    this.numTrees = options.numTrees || 100;
     this.percentData = options.percentData || .2;
     this.percentFeatures = options.percentFeatures || .7;
     this.verbose = options.verbose || false;
@@ -13,7 +13,7 @@ function RandomForest(input, target, features, options) {
     this.target = target;
     this.features = features.slice(0);
     this.trees = [];
-    this.percentBestTrees = .02;
+    this.percentBestTrees = .5;
 
     // The RF can generate trees or take the trees from previous generation
     if (this.initTrees) {
