@@ -83,7 +83,7 @@ Command.prototype = {
             type: "smu-clustering",
             score: this.newScore,
             prevTrees: this.cur_bestTree,
-            commands: []
+            commands: ["generate", "train", "bestTrees"]
         }
         return output;
     }
