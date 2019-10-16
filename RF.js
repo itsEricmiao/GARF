@@ -13,7 +13,7 @@ function RandomForest(input, target, features, options) {
     this.target = target;
     this.features = features.slice(0);
     this.trees = [];
-    this.percentBestTrees = .02;
+    this.percentBestTrees = .3;
 
     // The RF can generate trees or take the trees from previous generation
     if (this.initTrees) {

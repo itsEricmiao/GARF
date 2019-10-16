@@ -6,8 +6,8 @@ function Command(configFile) {
     var newData         = shuffle(data.all_data)
     this.config         = configFile
     this.model          = null;
-    this.training_set   = newData.slice(0, 50);
-    this.testing_set    = newData.slice(115, 129);
+    this.training_set   = newData.slice(0, 110);
+    this.testing_set    = newData.slice(111, 129);
     this.target         = data.target
     this.features       = data.all_features
     this.cur_bestTree   = [];
@@ -38,8 +38,8 @@ Command.prototype = {
 
     _generate: function () {
         var rf = new RF.RandomForest(this.training_set, this.target, this.features, {
-            numTrees: 25,	                    // how many trees should we use (results are averaged together)
-            percentData: 1,			        // what percentage of training data should each tree see (bootstrapping) - For larger datasets I find .15 works well
+            numTrees: 100,	                    // how many trees should we use (results are averaged together)
+            percentData: .9,			        // what percentage of training data should each tree see (bootstrapping) - For larger datasets I find .15 works well
             percentFeatures: 0.1,	            // what percentage of features should each tree see (feature bagging) - For larger datasets I find .7 works well
             bestTrees: this._readTrees()
         });
